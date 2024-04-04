@@ -24,7 +24,8 @@ public class Food {
 
     private Long price;
 
-    private List<Category> foodCategory;
+    @ManyToOne
+    private Category foodCategory;
 
     @Column(length = 1000)
     @ElementCollection // it will create seperate table for images
