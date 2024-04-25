@@ -54,6 +54,6 @@ public class Restaurant {
     private boolean open;  // when close user can't order
 
     @JsonIgnore // whn we ftch foods we dont need food list.... instead we 'll create seperate api for fetch food
-    @OneToMany(mappedBy = "foods", cascade = CascadeType.ALL)  // one res can haav multiple foods
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)  // one res can haav multiple foods
     private List<Food> foods = new ArrayList<>();
 }

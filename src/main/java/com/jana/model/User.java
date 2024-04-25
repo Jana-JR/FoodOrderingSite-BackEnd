@@ -42,7 +42,8 @@ public class User {
     // one user have many relation to Order class
     private List<Order> orders = new ArrayList<>();
 
-     private List<RestaurantDto> favourites = new ArrayList<>();
+    @ElementCollection
+    private List<RestaurantDto> favourites = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     //CascadeType.ALL --> if CRUD perf in a parent entity, all child entities associated with it will also be persisted, updated, or deleted

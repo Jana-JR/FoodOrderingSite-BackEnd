@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "orders")   // it tells 'orders' in Db and order entity are same.
 public class Order {
 
     @Id

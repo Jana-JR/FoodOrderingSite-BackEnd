@@ -18,7 +18,7 @@ public class IngredientsItem {
     private String name;
 
     @ManyToOne
-    private IngredientCategory ingredientCategory;  // sauce ingr ---> tomato sau, soya sau, whitw sauce
+    private IngredientCategory category;  // sauce ingr ---> tomato sau, soya sau, whitw sauce
 
     @JsonIgnore
     @ManyToOne  // one res have multiple ingr

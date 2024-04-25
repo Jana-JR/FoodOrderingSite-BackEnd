@@ -25,5 +25,5 @@ public class IngredientCategory {
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<IngredientsItem> ingredientsItems = new ArrayList<>();
+    private List<IngredientsItem> ingredients = new ArrayList<>();
 }
