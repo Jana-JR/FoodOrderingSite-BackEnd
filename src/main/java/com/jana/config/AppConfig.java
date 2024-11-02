@@ -17,38 +17,43 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
-@Configuration
+@Configuration  // indicates the class has @Bean definition methods
 @EnableWebSecurity
 public class AppConfig {
 
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement(managment -> managment.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyRole("RESTAURENT_OWNER", "ADMIN")
+                        .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER", "ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()  // users no need to give jwt token from accessing
                                                     // this end point url Eg: Signup and signin cuz they dont have jwt token or role on first visit
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsCconfigurationSource()));
-        return null;
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        return http.build();
     }
 
-    private CorsConfigurationSource corsCconfigurationSource() {
+    private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
 
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://locaalhost:3000"
+                        "http://localhost:3000"
                 ));
-                cfg.setAllowedMethods(Collections.singletonList("*"));
+
+                // SingletonList -- It has one element list. Once creatd can't modify
+                cfg.setAllowedMethods(Collections.singletonList("*")); // This line is setting the allowed "ALL" HTTP methods for the cross-origin request.
+                                                                        // put GET DELETE
                 cfg.setAllowCredentials(true);
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
-                cfg.setExposedHeaders(Arrays.asList("Authorization"));
+                cfg.setExposedHeaders(List.of("Authorization"));
                 cfg.setMaxAge(3600L);
                 return cfg;
             }

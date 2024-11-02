@@ -30,7 +30,7 @@ public class User {
 
     private String password;
 
-    private USER_ROLE role;
+    private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
 
     @JsonIgnore
     // used at field level to mark a property or list of properties to be ignored.
