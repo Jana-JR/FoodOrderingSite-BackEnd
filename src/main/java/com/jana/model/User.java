@@ -1,6 +1,7 @@
 package com.jana.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jana.dto.RestaurantDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class User {
 
     private String email;
 
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
@@ -36,7 +37,6 @@ public class User {
     // used at field level to mark a property or list of properties to be ignored.
     // whenever fetching USER entity we dont need this order list
     // to fetching ordrs we'll write seperate api
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     // by mappedBy --> telling springboot, dont create seperate table for his maapping, U can use order table
     // one user have many relation to Order class
@@ -48,7 +48,6 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     //CascadeType.ALL --> if CRUD perf in a parent entity, all child entities associated with it will also be persisted, updated, or deleted
     // orphanRemoval = true: "Child" entity is removed when it's no longer referenced (its parent may not be removed).
-
     private List<Address> addresses = new ArrayList<>();
 
 

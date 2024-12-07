@@ -15,7 +15,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
 public class AppConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(Authorize -> Authorize
@@ -33,8 +32,8 @@ public class AppConfig {
                         .anyRequest().permitAll()  // users no need to give jwt token from accessing
                                                     // this end point url Eg: Signup and signin cuz they dont have jwt token or role on first visit
                 ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .csrf(csrf ->csrf.disable())
+                .cors(cors ->cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 

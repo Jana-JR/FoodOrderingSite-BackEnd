@@ -12,13 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.security.Security;
 import java.util.List;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
@@ -49,8 +47,9 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             }catch (Exception e){
                 throw new BadCredentialsException("Invalid Token...");
             }
-            
+
         }
+        filterChain.doFilter(request, response);
 
     }
 }

@@ -30,7 +30,7 @@ public class JwtProvider {
                 .signWith(key)
                 .compact();
 
-        return null;
+        return jwt;
     }
 
     public String getEmailFromJwtToken(String jwt){
