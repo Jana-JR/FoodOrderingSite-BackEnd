@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jana</groupId>
-	<artifactId>Online-Food-Ordering</artifactId>
+	<artifactId>FoodBey-Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Online-Food-Ordering</name>
+	<name>FoodBey-Backend</name>
 	<description>Online Food Ordering System</description>
 	<properties>
 		<java.version>17</java.version>
