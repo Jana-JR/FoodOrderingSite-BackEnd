@@ -6,12 +6,14 @@ import com.jana.model.Restaurant;
 import com.jana.model.User;
 import com.jana.repository.AddressRepository;
 import com.jana.repository.RestaurantRepository;
+import com.jana.repository.UserRepository;
 import com.jana.request.CreateRestaurantRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService{
@@ -23,10 +25,10 @@ public class RestaurantServiceImpl implements RestaurantService{
     private AddressRepository addressRepository;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
 
-    @Override
+    @Override  // when implemnt a method from interface should use override
     public Restaurant createRestaurant(CreateRestaurantRequest req, User user) {
 
         Address address = addressRepository.save(req.getAddress());
@@ -47,41 +49,90 @@ public class RestaurantServiceImpl implements RestaurantService{
 
     @Override
     public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updatedRestaurant) {
-        return null;
+
+        Restaurant restaurant = new Restaurant();
+
+        if(restaurant.getCuisineType()!= null){
+            restaurant.setCuisineType(updatedRestaurant.getCuisineType());
+        }
+        if(restaurant.getDescription()!= null){
+            restaurant.setDescription(updatedRestaurant.getDescription());
+        }
+        if(restaurant.getName()!= null){
+            restaurant.setName(updatedRestaurant.getName());
+        }
+
+        return restaurantRepository.save(restaurant);
     }
 
     @Override
     public void deleteRestaurant(Long restaurantId) throws Exception {
+        Restaurant restaurant = findRestaurantById(restaurantId);
+        restaurantRepository.delete(restaurant);
 
     }
 
     @Override
     public List<Restaurant> getAllRestaurant() {
-        return null;
+        return restaurantRepository.findAll();
     }
 
     @Override
-    public List<Restaurant> searchRestaurant() {
-        return null;
+    public List<Restaurant> searchRestaurant(String keyword) {
+
+        return restaurantRepository.findBySearchQuery(keyword);
     }
 
     @Override
     public Restaurant findRestaurantById(Long id) throws Exception {
-        return null;
+
+        Optional<Restaurant> opt = restaurantRepository.findById(id);
+
+        if(opt.isEmpty()){
+            throw new Exception("Restaurant not found with id"+id);
+        }
+        return opt.get();
     }
 
     @Override
-    public Restaurant getRestaurantByUserId(Long id) throws Exception {
-        return null;
+    public Restaurant getRestaurantByUserId(Long userId) throws Exception {
+
+        Restaurant restaurant = restaurantRepository.findByOwnerId(userId);
+
+        if(restaurant == null){
+            throw new Exception("Restaurant not found with id"+userId);
+        }
+        return restaurant;
     }
 
     @Override
     public RestaurantDto addToFavourites(Long restaurantId, User user) throws Exception {
-        return null;
+        // check if it is in fav list. if found remove or notfound add
+
+        Restaurant restaurant= findRestaurantById(restaurantId);
+
+        RestaurantDto dto = new RestaurantDto();
+        dto.setDescription(restaurant.getDescription());
+        dto.setImages(restaurant.getImages());
+        dto.setTitle(restaurant.getName());
+        dto.setId(restaurantId);
+
+        if(user.getFavourites().contains(dto)){
+            user.getFavourites().remove(dto);
+        }
+        else user.getFavourites().add(dto);
+
+        userRepository.save(user);
+
+        return dto;
     }
 
     @Override
     public Restaurant updateRestaurantStatus(Long id) throws Exception {
-        return null;
+
+        Restaurant restaurant= findRestaurantById(id);
+        restaurant.setOpen(!restaurant.isOpen());
+
+        return restaurantRepository.save(restaurant);
     }
 }
